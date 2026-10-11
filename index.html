@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="RoboGuardian verifies physical effects, maintains trusted memory, and recovers from execution faults in embodied-agent harnesses.">
+  <meta name="theme-color" content="#ffffff">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="RoboGuardian: Fault-Aware Execution and Memory Maintenance">
+  <meta property="og:description" content="From software returns to verified physical effects. Explore the method, demonstrations, and evaluation of RoboGuardian.">
+  <title>RoboGuardian | Fault-Aware Execution and Memory Maintenance</title>
+  <link rel="icon" href="./assets/images/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./assets/css/style.css">
+  <script src="./assets/js/script.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="hero container">
+    <h1><span class="project-name">Robo<span>Guardian</span></span><span class="paper-title">Fault-Aware Execution and Memory Maintenance<br class="desktop-break"> for Embodied Agent Harness Frameworks</span></h1>
+    <p class="authors">
+      <span>Zijie Gao<sup>1,*</sup></span>
+      <span>Chenxu Li<sup>1,*</sup></span>
+      <span>Zixuan Chen<sup>1,†</sup></span>
+      <span>Jiapeng Xu<sup>1</sup></span>
+      <span>Wenquan Zhang<sup>1</sup></span>
+      <span>Yizhou Zhu<sup>2</sup></span>
+      <span>Rongjin Zheng<sup>3</sup></span>
+      <span>Xinke Wang<sup>1</sup></span>
+      <span>Jieqi Shi<sup>1,†</sup></span>
+      <span>Jing Huo<sup>1,†</sup></span>
+      <span>Yang Gao<sup>1</sup></span>
+    </p>
+    <p class="affiliations"><span><sup>1</sup>Nanjing University</span><span><sup>2</sup>University of Pennsylvania</span><span><sup>3</sup>Central South University</span></p>
+    <p class="author-notes"><span>* Equal contribution</span><span>† Corresponding authors</span></p>
+    <nav class="resource-links" aria-label="Project resources">
+      <a class="button" href="./assets/papers/RoboGuardian.pdf" target="_blank" rel="noopener" aria-label="Read the paper PDF">
+        <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M14 2H5v20h14V7Zm0 0v5h5M8 12h8M8 16h8"/></svg>Paper
+      </a>
+      <a class="button" href="https://github.com/Tsuki-Gor/RoboGuardian" target="_blank" rel="noopener noreferrer">
+        <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m8 5-7 7 7 7m8-14 7 7-7 7m-2-16-4 20"/></svg>Code
+      </a>
+      <a class="button" href="#demo"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="3"/><path d="m10 8 6 4-6 4Z"/></svg>Video</a>
+      <a class="button" href="#bibtex" hidden><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M9 5H5a2 2 0 0 0-2 2v5h6v7H3m18-14h-4a2 2 0 0 0-2 2v5h6v7h-6"/></svg>BibTeX</a>
+    </nav>
+    <p class="tagline">Verify what happened.<br class="mobile-break"> Remember what is confirmed.</p>
+  </header>
+
+  <main id="main">
+    <section class="demo container" id="demo" aria-label="RoboGuardian video demonstration">
+      <figure>
+        <video controls playsinline preload="metadata" poster="./assets/images/demo-poster.jpg" width="960" height="544" aria-label="RoboGuardian research presentation" aria-describedby="video-caption">
+          <source src="./assets/videos/demo.mp4" type="video/mp4">
+          Your browser does not support embedded video. <a href="./assets/videos/demo.mp4">Download the demonstration.</a>
+        </video>
+        <figcaption id="video-caption">RoboGuardian connects action execution, physical-effect verification, trusted memory, and recovery in one embodied-agent harness.</figcaption>
+      </figure>
+      <nav class="section-links" aria-label="On this page"><a href="#abstract">Abstract</a><a href="#overview">Overview</a><a href="#method">Method</a><a href="#results">Results</a><a href="#real-world">Real world</a></nav>
+    </section>
+
+    <section class="section subtle" id="abstract">
+      <div class="container reading-width">
+        <h2>Abstract</h2>
+        <p>Embodied-agent harnesses connect high-level planners to low-level execution policies and use execution results to update task state and memory. However, current harness mechanisms often fail to verify physical state changes reliably. This limitation applies to both low-level execution feedback and VLM-based evaluations. Unverified outcomes may therefore enter memory and mislead subsequent actions.</p>
+        <p>We present <strong>RoboGuardian</strong>, a fault-aware execution and memory-maintenance framework for embodied-agent harnesses. It organizes execution exceptions into three response-oriented categories: <strong>outdated plan steps, uncertain outcomes, and execution failures</strong>. RoboGuardian checks plan validity and entity identity before execution and combines semantic, proprioceptive, and effect-level evidence to produce a three-way physical-effect judgment. Only physically confirmed actions update its embodied memory and progress. It maintains a bounded trusted context and re-observes before retrying unresolved actions, preventing blind retry and replay.</p>
+        <p>We evaluate the framework on LIBERO-10, Clutter-Bench, and vision-language navigation in Habitat, and demonstrate its behavior on dual-arm and dexterous-hand manipulation platforms. The evaluations examine execution reliability, receipt-gated memory, and context cost at the integration granularity supported by each platform.</p>
+      </div>
+    </section>
+
+    <section class="section container" id="overview">
+      <h2>From execution to verified progress</h2>
+      <p class="section-intro">A skill can report success while the intended physical effect never happens.<br class="desktop-break"> RoboGuardian checks the evidence before that result becomes a trusted fact.</p>
+      <figure class="overview-figure">
+        <a class="figure-link" href="./assets/images/overview.png" target="_blank" rel="noopener" aria-label="Open the RoboGuardian overview figure at full size">
+          <img src="./assets/images/overview.png" alt="RoboGuardian adds recognition, receipt-gated memory, and recovery to the plan-and-execute loop, spanning real-world manipulation, dexterous manipulation, and navigation." width="1801" height="1673" loading="lazy" decoding="async">
+        </a>
+        <figcaption>The planner and skill library are retained. RoboGuardian governs action admission, physical-effect verification, memory updates, and recovery.</figcaption>
+      </figure>
+    </section>
+
+    <section class="section subtle" id="method">
+      <div class="container">
+        <h2>How RoboGuardian works</h2>
+        <p class="section-intro">Plan and execute. Recognize. Remember. Recover.</p>
+        <figure>
+          <a class="figure-link" href="./assets/images/pipeline.png" target="_blank" rel="noopener" aria-label="Open the method figure at full size">
+            <img src="./assets/images/pipeline.png" alt="An admission gate checks proposed actions. Multimodal evidence yields yes, no, or uncertain judgments. The commit gate creates committed, rejected, or unknown receipts. Only committed receipts update verified memory; uncertain outcomes return to re-observation before retry." width="2200" height="1481" loading="lazy" decoding="async">
+          </a>
+          <figcaption>Effect Receipts connect physical evidence to trusted state. Rejected and unknown attempts remain available for diagnosis without becoming verified progress.</figcaption>
+        </figure>
+        <ol class="method-steps">
+          <li><h3>Plan &amp; execute</h3><p>Check plan validity, skill applicability, and entity identity before dispatch.</p></li>
+          <li><h3>Recognize</h3><p>Combine available semantic, proprioceptive, and effect-level evidence into <em>yes</em>, <em>no</em>, or <em>uncertain</em>.</p></li>
+          <li><h3>Remember</h3><p>Admit only committed effects to verified memory and progress, then build a bounded planning context.</p></li>
+          <li><h3>Recover</h3><p>Replan outdated steps, recover from rejected effects, and re-observe unresolved outcomes before retrying.</p></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="section container" id="results">
+      <h2>Experiments in simulation</h2>
+      <p class="section-intro">From low-level actions to high-level skills and navigation episodes.</p>
+      <figure>
+        <a class="figure-link" href="./assets/images/simulation.png" target="_blank" rel="noopener" aria-label="Open the simulated environments figure at full size">
+          <img src="./assets/images/simulation.png" alt="Experimental settings in LIBERO-10 manipulation, Clutter-Bench dexterous grasping, and Habitat vision-language navigation." width="1801" height="940" loading="lazy" decoding="async">
+        </a>
+        <figcaption>Each setting retains its native planner or policy. Verification and reported metrics follow the integration granularity of the platform.</figcaption>
+      </figure>
+
+      <div class="result-block">
+        <h3>Action-level verification on LIBERO-10</h3>
+        <p>A frozen SmolVLA policy is evaluated over 600 episodes: 10 tasks × 10 initial states × 3 conditions × 2 variants. Both variants use the same policy reinference frequency.</p>
+        <div class="table-scroll" role="region" aria-label="LIBERO-10 results, scroll horizontally on small screens" tabindex="0">
+          <table class="libero-table">
+            <caption>LIBERO-10 · 100 episodes per row</caption>
+            <thead><tr><th scope="col">Condition</th><th scope="col">Variant</th><th scope="col">TSR ↑</th><th scope="col">VSR ↑</th><th scope="col">Actions ↓</th><th scope="col">Wall time (s) ↓</th></tr></thead>
+            <tbody>
+              <tr><th scope="rowgroup" rowspan="2">Clean</th><td>Base</td><td>0.43</td><td>0.43</td><td>418.6</td><td>358.4</td></tr>
+              <tr class="ours"><td>RoboGuardian</td><td>0.42</td><td>0.42</td><td>395.7</td><td>349.2</td></tr>
+            </tbody>
+            <tbody>
+              <tr><th scope="rowgroup" rowspan="2">Outdated chunk</th><td>Base</td><td>0.41</td><td>0.20</td><td>426.8</td><td>367.0</td></tr>
+              <tr class="ours"><td>RoboGuardian</td><td>0.41</td><td>0.41</td><td>378.5</td><td>338.9</td></tr>
+            </tbody>
+            <tbody>
+              <tr><th scope="rowgroup" rowspan="2">Timeout / retry</th><td>Base</td><td>0.42</td><td>0.22</td><td>420.4</td><td>374.3</td></tr>
+              <tr class="ours"><td>RoboGuardian</td><td>0.39</td><td>0.39</td><td>387.8</td><td>354.9</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="table-note"><strong>TSR</strong> is the native task success rate. <strong>VSR</strong> counts successful episodes whose execution chain has no outdated plan-step dispatch, duplicate dispatch, or unresolved outcome. Actions and wall time are per-episode means.</p>
+        <p>Under outdated chunks, both variants reach the same task success rate, but RoboGuardian verifies all 41 successes. Under timeout / retry faults, it produces no duplicate actions or unverified writes while abstaining when evidence remains unresolved.</p>
+      </div>
+
+      <div class="result-block">
+        <h3>Skill-level verification on Clutter-Bench</h3>
+        <p>Seven object categories, three clutter levels, and 63 paired scenes per condition. The planner and high-level push, pull, and grasp skills are shared between variants.</p>
+        <div class="table-scroll" role="region" aria-label="Clutter-Bench results, scroll horizontally on small screens" tabindex="0">
+          <table>
+            <caption>Clutter-Bench · paired evaluation</caption>
+            <thead><tr><th scope="col">Condition</th><th scope="col">Base TSR ↑</th><th scope="col" class="ours">Ours TSR ↑</th><th scope="col">Base VSR ↑</th><th scope="col" class="ours">Ours VSR ↑</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">Clean</th><td>0.857</td><td class="ours">0.905</td><td>0.825</td><td class="ours">0.857</td></tr>
+              <tr><th scope="row">False success</th><td>0.476</td><td class="ours">0.889</td><td>0.460</td><td class="ours">0.889</td></tr>
+              <tr><th scope="row">Response loss</th><td>0.841</td><td class="ours">0.889</td><td>0.825</td><td class="ours">0.873</td></tr>
+              <tr class="pooled"><th scope="row">Pooled</th><td>0.725</td><td class="ours">0.894</td><td>0.704</td><td class="ours">0.873</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="table-note">“Ours” denotes RoboGuardian. Pooled values summarize all 189 scenes per variant and are descriptive.</p>
+        <p>Across these conditions, unverified memory writes fall from <strong>170 to 0</strong>. Under response loss, duplicate physical actions fall from <strong>32 to 0</strong> through re-observation before another action is issued.</p>
+      </div>
+
+      <div class="result-block memory-results">
+        <div>
+          <h3>Remember confirmed progress</h3>
+          <p>A three-image recency window can discard established progress. Receipt-gated memory preserves verified effects in a compact planning context.</p>
+          <p>In the separate memory ablation, verified successes increase from <strong>15/90 to 60/90</strong> with receipt-gated memory. Mean skill dispatches fall from 51.6 to 35.0.</p>
+          <p>In the main Clutter-Bench evaluation, RoboGuardian bounds each model request to <strong>5 images</strong>, compared with a peak of 53 for Base. Peak request size falls from 21.29 MB to 2.05 MB.</p>
+          <p class="table-note">The ablation uses 30 paired scenes per condition. Its results are separate from the 63-scene main evaluation.</p>
+        </div>
+        <figure>
+          <a class="figure-link" href="./assets/images/memory-ablation.png" target="_blank" rel="noopener" aria-label="Open the memory ablation figure at full size">
+            <img src="./assets/images/memory-ablation.png" alt="Memory ablation: receipt-gated memory verifies 23, 15, and 22 successes out of 30 scenes in clean, false-success, and response-loss conditions, compared with 7, 1, and 7 for a recency window." width="1400" height="846" loading="lazy" decoding="async">
+          </a>
+          <figcaption>Receipt-gated memory versus a bounded recency window.</figcaption>
+        </figure>
+      </div>
+
+      <div class="result-block navigation-results">
+        <h3>Transfer to vision-language navigation</h3>
+        <p>RoboGuardian wraps LaViRA evaluations on Habitat R2R-CE at the <strong>macro level</strong>. Three repeats on OpenNav-100 cover 300 navigation episodes.</p>
+        <dl class="navigation-metrics"><div><dt>Success</dt><dd>0.327 <small>± 0.040</small></dd></div><div><dt>SPL</dt><dd>0.245 <small>± 0.032</small></dd></div><div><dt>nDTW</dt><dd>0.427 <small>± 0.015</small></dd></div><div><dt>SDTW</dt><dd>0.226 <small>± 0.037</small></dd></div></dl>
+        <p class="table-note">Mean ± standard deviation over three repeats. These results demonstrate macro-level integration and auditable evaluation records; they do not establish improved navigation performance or verification of individual motion commands.</p>
+      </div>
+    </section>
+
+    <section class="section subtle" id="real-world">
+      <div class="container">
+        <h2>Verification on physical robots</h2>
+        <p class="section-intro">Qualitative demonstrations on a dexterous hand and a dual-arm manipulator.</p>
+        <figure>
+          <a class="figure-link" href="./assets/images/realworld.png" target="_blank" rel="noopener" aria-label="Open the physical robot experiments figure at full size">
+            <img src="./assets/images/realworld.png" alt="Real-world grasping and sequential manipulation cases compare accepting software success with verifying object retention and checking committed prerequisites." width="2201" height="746" loading="lazy" decoding="async">
+          </a>
+          <figcaption>Camera observations and robot state provide evidence for physical-effect judgments on the real platforms.</figcaption>
+        </figure>
+        <div class="real-world-cases">
+          <div><h3>Dexterous grasping</h3><p>A grasp reports success although the object is not retained. RoboGuardian rejects the effect, keeps the failed attempt out of trusted memory, and re-observes before a later grasp is verified.</p></div>
+          <div><h3>Sequential manipulation</h3><p>On the dual-arm platform, the next skill depends on retaining an earlier object. RoboGuardian blocks a dependent step when that prerequisite fails and rejects final completion if the retained object later slips.</p></div>
+        </div>
+        <p class="evidence-note">These demonstrations illustrate verification and memory maintenance on physical hardware. Their reliability depends on the available perception and robot evidence.</p>
+      </div>
+    </section>
+
+    <!-- 暂时隐藏引用；出版信息确认后移除此区块及顶部 BibTeX 入口的 hidden。 -->
+    <section class="section container reading-width" id="bibtex" hidden>
+      <div class="citation-heading"><h2>BibTeX</h2><button class="copy-button" id="copy-citation" type="button" hidden>Copy citation</button></div>
+      <p class="citation-note">Manuscript citation. Publication details will be updated when available.</p>
+      <pre tabindex="0" aria-label="BibTeX citation"><code id="citation">@misc{gao2026roboguardian,
+  title = {RoboGuardian: Fault-Aware Execution and Memory
+           Maintenance for Embodied Agent Harness Frameworks},
+  author = {Gao, Zijie and Li, Chenxu and Chen, Zixuan and
+            Xu, Jiapeng and Zhang, Wenquan and Zhu, Yizhou and
+            Zheng, Rongjin and Wang, Xinke and Shi, Jieqi and
+            Huo, Jing and Gao, Yang},
+  year = {2026},
+  note = {Manuscript}
+}</code></pre>
+      <p id="copy-status" class="copy-status" role="status" aria-live="polite"></p>
+    </section>
+  </main>
+
+  <footer><div class="container"><p>RoboGuardian · Fault-aware execution and memory maintenance</p><p><a href="https://github.com/Tsuki-Gor/RoboGuardian" target="_blank" rel="noopener noreferrer">Website source</a> · <a href="#">Back to top ↑</a></p></div></footer>
+</body>
+</html>
