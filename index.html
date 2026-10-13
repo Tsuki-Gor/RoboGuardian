@@ -48,7 +48,7 @@
   <main id="main">
     <section class="demo container" id="demo" aria-label="RoboGuardian video demonstration">
       <figure>
-        <video controls playsinline preload="metadata" poster="./assets/images/demo-poster.jpg" width="960" height="544" aria-label="RoboGuardian research presentation" aria-describedby="video-caption">
+        <video controls playsinline preload="none" poster="./assets/images/demo-poster.jpg" width="1920" height="1080" aria-label="RoboGuardian research presentation" aria-describedby="video-caption">
           <source src="./assets/videos/demo.mp4" type="video/mp4">
           Your browser does not support embedded video. <a href="./assets/videos/demo.mp4">Download the demonstration.</a>
         </video>
@@ -129,6 +129,22 @@
         </div>
         <p class="table-note"><strong>TSR</strong> is the native task success rate. <strong>VSR</strong> counts successful episodes whose execution chain has no outdated plan-step dispatch, duplicate dispatch, or unresolved outcome. Actions and wall time are per-episode means.</p>
         <p>Under outdated chunks, both variants reach the same task success rate, but RoboGuardian verifies all 41 successes. Under timeout / retry faults, it produces no duplicate actions or unverified writes while abstaining when evidence remains unresolved.</p>
+        <div class="video-grid">
+          <figure>
+            <video controls playsinline preload="none" poster="./assets/images/supplementary/libero-1.jpg" width="1024" height="512" aria-label="LIBERO-10 · example 1" aria-describedby="libero-1-caption">
+              <source src="./assets/videos/supplementary/libero-1.mp4" type="video/mp4">
+              Your browser does not support embedded video. <a href="./assets/videos/supplementary/libero-1.mp4">Download the video.</a>
+            </video>
+            <figcaption id="libero-1-caption">LIBERO-10 · example 1</figcaption>
+          </figure>
+          <figure>
+            <video controls playsinline preload="none" poster="./assets/images/supplementary/libero-2.jpg" width="1024" height="512" aria-label="LIBERO-10 · example 2" aria-describedby="libero-2-caption">
+              <source src="./assets/videos/supplementary/libero-2.mp4" type="video/mp4">
+              Your browser does not support embedded video. <a href="./assets/videos/supplementary/libero-2.mp4">Download the video.</a>
+            </video>
+            <figcaption id="libero-2-caption">LIBERO-10 · example 2</figcaption>
+          </figure>
+        </div>
       </div>
 
       <div class="result-block">
@@ -148,6 +164,22 @@
         </div>
         <p class="table-note">“Ours” denotes RoboGuardian. Pooled values summarize all 189 scenes per variant and are descriptive.</p>
         <p>Across these conditions, unverified memory writes fall from <strong>170 to 0</strong>. Under response loss, duplicate physical actions fall from <strong>32 to 0</strong> through re-observation before another action is issued.</p>
+        <div class="video-grid">
+          <figure>
+            <video controls playsinline preload="none" poster="./assets/images/supplementary/clutter-bench-1.jpg" width="1024" height="512" aria-label="Clutter-Bench · example 1" aria-describedby="clutter-bench-1-caption">
+              <source src="./assets/videos/supplementary/clutter-bench-1.mp4" type="video/mp4">
+              Your browser does not support embedded video. <a href="./assets/videos/supplementary/clutter-bench-1.mp4">Download the video.</a>
+            </video>
+            <figcaption id="clutter-bench-1-caption">Clutter-Bench · example 1</figcaption>
+          </figure>
+          <figure>
+            <video controls playsinline preload="none" poster="./assets/images/supplementary/clutter-bench-2.jpg" width="1024" height="512" aria-label="Clutter-Bench · example 2" aria-describedby="clutter-bench-2-caption">
+              <source src="./assets/videos/supplementary/clutter-bench-2.mp4" type="video/mp4">
+              Your browser does not support embedded video. <a href="./assets/videos/supplementary/clutter-bench-2.mp4">Download the video.</a>
+            </video>
+            <figcaption id="clutter-bench-2-caption">Clutter-Bench · example 2</figcaption>
+          </figure>
+        </div>
       </div>
 
       <div class="result-block memory-results">
@@ -171,6 +203,15 @@
         <p>RoboGuardian wraps LaViRA evaluations on Habitat R2R-CE at the <strong>macro level</strong>. Three repeats on OpenNav-100 cover 300 navigation episodes.</p>
         <dl class="navigation-metrics"><div><dt>Success</dt><dd>0.327 <small>± 0.040</small></dd></div><div><dt>SPL</dt><dd>0.245 <small>± 0.032</small></dd></div><div><dt>nDTW</dt><dd>0.427 <small>± 0.015</small></dd></div><div><dt>SDTW</dt><dd>0.226 <small>± 0.037</small></dd></div></dl>
         <p class="table-note">Mean ± standard deviation over three repeats. These results demonstrate macro-level integration and auditable evaluation records; they do not establish improved navigation performance or verification of individual motion commands.</p>
+        <div class="video-grid">
+          <figure class="video-featured">
+            <video controls playsinline preload="none" poster="./assets/images/supplementary/habitat-1.jpg" width="1280" height="688" aria-label="Habitat · vision-language navigation" aria-describedby="habitat-1-caption">
+              <source src="./assets/videos/supplementary/habitat-1.mp4" type="video/mp4">
+              Your browser does not support embedded video. <a href="./assets/videos/supplementary/habitat-1.mp4">Download the video.</a>
+            </video>
+            <figcaption id="habitat-1-caption">Habitat · vision-language navigation</figcaption>
+          </figure>
+        </div>
       </div>
     </section>
 
@@ -187,6 +228,29 @@
         <div class="real-world-cases">
           <div><h3>Dexterous grasping</h3><p>A grasp reports success although the object is not retained. RoboGuardian rejects the effect, keeps the failed attempt out of trusted memory, and re-observes before a later grasp is verified.</p></div>
           <div><h3>Sequential manipulation</h3><p>On the dual-arm platform, the next skill depends on retaining an earlier object. RoboGuardian blocks a dependent step when that prerequisite fails and rejects final completion if the retained object later slips.</p></div>
+        </div>
+        <div class="video-grid">
+          <figure class="video-featured">
+            <video controls playsinline preload="none" poster="./assets/images/supplementary/dexterous-grasping-1.jpg" width="1024" height="512" aria-label="Dexterous grasping · baseline and RoboGuardian" aria-describedby="dexterous-grasping-1-caption">
+              <source src="./assets/videos/supplementary/dexterous-grasping-1.mp4" type="video/mp4">
+              Your browser does not support embedded video. <a href="./assets/videos/supplementary/dexterous-grasping-1.mp4">Download the video.</a>
+            </video>
+            <figcaption id="dexterous-grasping-1-caption">Dexterous grasping · baseline and RoboGuardian</figcaption>
+          </figure>
+          <figure>
+            <video controls playsinline preload="none" poster="./assets/images/supplementary/sequential-manipulation-1.jpg" width="1024" height="512" aria-label="Sequential manipulation · example 1" aria-describedby="sequential-manipulation-1-caption">
+              <source src="./assets/videos/supplementary/sequential-manipulation-1.mp4" type="video/mp4">
+              Your browser does not support embedded video. <a href="./assets/videos/supplementary/sequential-manipulation-1.mp4">Download the video.</a>
+            </video>
+            <figcaption id="sequential-manipulation-1-caption">Sequential manipulation · example 1</figcaption>
+          </figure>
+          <figure>
+            <video controls playsinline preload="none" poster="./assets/images/supplementary/sequential-manipulation-2.jpg" width="1024" height="512" aria-label="Sequential manipulation · example 2" aria-describedby="sequential-manipulation-2-caption">
+              <source src="./assets/videos/supplementary/sequential-manipulation-2.mp4" type="video/mp4">
+              Your browser does not support embedded video. <a href="./assets/videos/supplementary/sequential-manipulation-2.mp4">Download the video.</a>
+            </video>
+            <figcaption id="sequential-manipulation-2-caption">Sequential manipulation · example 2</figcaption>
+          </figure>
         </div>
         <p class="evidence-note">These demonstrations illustrate verification and memory maintenance on physical hardware. Their reliability depends on the available perception and robot evidence.</p>
       </div>
