@@ -39,6 +39,7 @@ h1 { margin: 0 0 28px; }
 .project-name { display: block; margin-bottom: 14px; font-size: 58px; letter-spacing: -2.2px; }
 .project-name span { color: var(--accent); }
 .paper-title { display: block; font-size: 35px; line-height: 1.28; letter-spacing: -.95px; text-wrap: balance; }
+.conference { display: inline-block; margin: 0 0 24px; padding: 5px 18px; border-radius: 24px; background: var(--highlight); color: var(--accent); font-size: 20px; font-weight: 700; }
 .authors { max-width: 980px; margin: 0 auto 16px; font-size: 20px; line-height: 1.8; }
 .authors > span { display: inline-block; margin: 0 7px; }
 .authors sup { color: var(--accent); padding-left: 2px; }
