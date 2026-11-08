@@ -1,0 +1,80 @@
+diff --git a/exec/skills/clear.py b/exec/skills/clear.py
+index 76ae174..8ad51ed 100644
+--- a/exec/skills/clear.py
++++ b/exec/skills/clear.py
+@@ -9,11 +9,24 @@ import numpy as np
+ import torch
+ 
+ from exec.skills.base import BaseSkill, SkillResult, StepEvent
+-from exec.skills.ee_pose import EEPoseSkill
++from exec.skills.ee_pose import EEPoseSkill, FingerPoseConfig
+ 
+ 
+ Mode = Literal["push", "pull"]
+ Side = Literal["left", "center", "right", "middle"]
++PUSH_HAND_QPOS = torch.tensor(
++    [1.655, 0.102, 1.2, 1.2, 1.2, -0.6, 1.2, 0.2, 0.2, 0.2, 0.2, 0.2],
++    dtype=torch.float32,
++)
++
++
++def _work_pose_skill(env, mode: Mode) -> EEPoseSkill:
++    if mode == "push":
++        return EEPoseSkill(
++            env,
++            cfg=FingerPoseConfig(q_push_pull=PUSH_HAND_QPOS),
++        )
++    return EEPoseSkill(env)
+ 
+ 
+ @dataclass
+@@ -214,8 +227,8 @@ class _SimplePushPull(BaseSkill):
+             ok_yaw, _yaw_steps = self._yaw_align(yaw_finger, render=render, verbose=verbose)
+ 
+             # 1.5) Set finger pose to "work"
+-            pose_skill = EEPoseSkill(self.env)
+-            pose_res = pose_skill.set_pose("work", render=render, verbose=verbose)
++            pose_skill = _work_pose_skill(self.env, mode)
++            _ = pose_skill.set_pose("work", render=render, verbose=verbose)
+ 
+             # 2) Move until moved_total reaches dist_m (step budget is just safety)
+             step_m = float(self.cfg.step_m)
+diff --git a/tests/test_push_pose.py b/tests/test_push_pose.py
+new file mode 100644
+index 0000000..8e569cc
+--- /dev/null
++++ b/tests/test_push_pose.py
+@@ -0,0 +1,33 @@
++from __future__ import annotations
++
++import unittest
++from unittest.mock import patch
++
++import torch
++
++from exec.skills import clear
++
++
++class PushPoseTest(unittest.TestCase):
++    def test_fixed_pose_applies_only_to_push(self) -> None:
++        env = object()
++        expected = torch.tensor(
++            [1.655, 0.102, 1.2, 1.2, 1.2, -0.6, 1.2, 0.2, 0.2, 0.2, 0.2, 0.2],
++            dtype=torch.float32,
++        )
++        with patch.object(clear, "EEPoseSkill") as pose_skill:
++            clear._work_pose_skill(env, "push")
++            self.assertTrue(
++                torch.equal(
++                    pose_skill.call_args.kwargs["cfg"].q_push_pull,
++                    expected,
++                )
++            )
++
++            pose_skill.reset_mock()
++            clear._work_pose_skill(env, "pull")
++            pose_skill.assert_called_once_with(env)
++
++
++if __name__ == "__main__":
++    unittest.main()

@@ -1,4 +1,11 @@
-.codegraph/
-.DS_Store
 __pycache__/
-/assets/videos/supplementary.zip
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.venv/
+.codegraph/
+.idea/
+.env
+.env.*
+!.env.example

@@ -1,0 +1,6 @@
+[submodule "adacleargrasp"]
+	path = third_party/AdaClearGrasp
+	url = https://github.com/NJU-R-L-Group-Embodied-Lab/AdaClearGrasp.git
+[submodule "lavira"]
+	path = third_party/LaViRA
+	url = https://github.com/NJU-R-L-Group-Embodied-Lab/lavira-code.git
